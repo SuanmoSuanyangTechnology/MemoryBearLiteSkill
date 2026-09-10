@@ -43,28 +43,28 @@ Agent 会依据 SKILL.md 自动执行以下流程：
 
 ---
 
-## 核心思路：钥匙不直连，宝库有门神
+## 核心思路：你的钥匙不直接连数据库，中间隔着一道关卡
 
 <div align="center">
-<img src="assets/architecture.png" alt="三重关隘：来客 → 关隘 → 本源" width="820" />
+<img src="assets/architecture.png" alt="三道门：你和客户端 → MemorySkills 关卡 → MemoryBear 记忆库" width="820" />
 </div>
 
-MemorySkills 的安全模型可以想成**三重关隘**：
+安全设计对应图里从左到右的**三道门**：
 
-| 关隘 | 角色 | 持有的凭证 |
+| 图中位置 | 是谁 | 手里拿着什么 |
 |------|------|-----------|
-| **来客**（左） | 浏览器用户 / AI 客户端 | 记忆钥匙 `sk-mem-`（你领到的那把） |
-| **关隘**（中） | MemorySkills 服务端 | 空间钥匙 `sk-service-`（**绝不下发**，只在门内） |
-| **本源**（右） | MemoryBear 记忆宝库 | REST 读写接口 |
+| **左边（来客）** | 你和你的 AI 客户端 | 你领到的记忆钥匙 `sk-mem-` |
+| **中间（关卡）** | MemorySkills 服务端 | 空间钥匙 `sk-service-`，**只留在服务端，绝不发给你** |
+| **右边（宝库）** | MemoryBear 记忆库 | 真正存取记忆的 REST 读写接口 |
 
-关键点：**你手上的 `sk-mem-` 永远不会直连 MemoryBear**。请求先到 MemorySkills，服务端校验你的记忆钥匙后，再用自己持有的 `sk-service-` 代你去读写记忆。那枚朱砂红大令牌（`sk-service-`）只收在门内，从不交到来客手上——这就是这套设计的安全边界。
+一句话说清：**你手上的 `sk-mem-` 不会直接连到 MemoryBear**。你的请求先到中间的 MemorySkills，它验过你的记忆钥匙，再用自己那把 `sk-service-` 替你去读写记忆。就像图里那枚红色的空间钥匙——它只待在中间这道门里，从不会交到你手上，这就是这套设计的安全边界。
 
 ---
 
 ## 三步领到钥匙（你在浏览器里做的部分）
 
 <div align="center">
-<img src="assets/onboarding.png" alt="免密领取记忆钥匙" width="820" />
+<img src="assets/onboarding.png" alt="免密登录领取记忆钥匙" width="820" />
 </div>
 
 Agent 会帮你打开下面这个登录页，你在浏览器里完成这三步即可：
@@ -101,7 +101,7 @@ Agent 会帮你打开下面这个登录页，你在浏览器里完成这三步�
 <img src="assets/memory-tools.png" alt="读写双诀：read_memory / write_memory" width="820" />
 </div>
 
-### 溯忆 · `read_memory`
+### 回忆 · `read_memory`
 
 当问题依赖历史偏好、过往决策或长期上下文时，从记忆深处取回相关内容。
 
@@ -115,7 +115,7 @@ read_memory(message="<与当前问题直接相关的自然语言查询>", search
   - `deep`：更完整扫描历史，延迟稍高。
   - `research`：最深档，延迟最高，仅用于研究性回顾。
 
-### 铭刻 · `write_memory`
+### 记住 · `write_memory`
 
 当你明确要求记住，或提供了值得跨会话保存的稳定偏好、长期决策时，把它刻入记忆。
 
