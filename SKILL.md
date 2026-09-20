@@ -240,7 +240,6 @@ write_memory(message="<简洁、完整、可独立理解的记忆>")
 - **`ToolError: search_switch 参数无效`**：只接受 `express` / `deep` / `research` 三个值；不要传其他自造词。
 - 凭证卡未出现（点了登录但页面无反应）：让用户刷新 `/#/login` 并重新走一次验证码流程。
 - MCP 返回 401（含 `WWW-Authenticate: Bearer`）：Header 未带 `Authorization` 或 Key 已失效；让用户回到 `/#/login` 重新登录一次，凭证卡里复制同一把 Key 并更新客户端配置。
-- MCP 返回 403：不要添加 `other_id` 绕过；报告 Key 归属或权限异常。
 - 登录提交返回 403 `CSRF_ORIGIN_INVALID`：浏览器 Origin 与服务器 `PORTAL_PUBLIC_ORIGIN` 不匹配。常见原因：前端走 HTTPS 而白名单配了 HTTP（如 `https://memoryskills.redbearai.com` vs `http://...`），或反代改写/丢弃 Origin。让管理员核对环境变量协议与浏览器地址一致。
 - Key 已禁用：当前重复领取不会自动轮换，停止并让管理员恢复或更换 Key。
 - 工具未出现：检查配置结构、MCP URL、客户端是否支持远程 HTTP，以及是否已经重新加载。
