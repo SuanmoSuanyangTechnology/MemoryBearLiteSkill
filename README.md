@@ -203,7 +203,6 @@ write_memory(message="<简洁、完整、可独立理解的记忆>")
 | `ToolError: message 长度超限` | 单条记忆超 8000 字符，先摘要或拆条写入 |
 | `ToolError: search_switch 无效` | 只接受 `express` / `deep` / `research` 三值 |
 | MCP 返回 401 | Header 缺 `Authorization` 或 Key 失效，回登录页重新复制同一把 Key |
-| MCP 返回 403 | 不要加 `other_id` 绕过，应排查 Key 归属或权限 |
 | 登录返回 403 `CSRF_ORIGIN_INVALID` | 浏览器 Origin 与服务器白名单协议不一致（如 HTTPS vs HTTP），请管理员核对 |
 | 写入后立即读不到 | 异步处理，稍后重试，不要重复批量写入 |
 
